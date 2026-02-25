@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaUser } from "react-icons/fa6"
+import { FaUser } from "react-icons/fa6";
+import { FaBars } from "react-icons/fa";
+import { IoIosCloseCircle } from "react-icons/io";
 function Navbar() {
   const [data, setdata] = useState([]);
-  const [newsid, setnewsid] = useState({});
   const [loading, setLoading] = useState(false);
-  const [storyType, setStoryType] = useState("");
+  const [storyType, setStoryType] = useState("jobstories");
   const [selectedStory, setSelectedStory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const storiesPerPage = 15;
-  const handleClick = (e) => {
-    const newStoryType = e.target.innerText.toLowerCase();
-    setStoryType(newStoryType);
-  };
   const fetchdata = async (storyType) => {
     try {
       setLoading(true);
@@ -55,71 +53,54 @@ function Navbar() {
   };
   return (
     <>
-      <div className="flex h-screen">
-        <div className="bg-slate-800 h-screen w-46 text-white text-center text-xl">
-          <p className="p-2 font-bold m-2">DASHBOARD</p>
-          <div
-            className="cursor-pointer hover:bg-slate-700 p-2"
-            onClick={handleClick}
-          >
-            TopStories
-          </div>
-          <div
-            className="cursor-pointer hover:bg-slate-700 p-2"
-            onClick={handleClick}
-          >
-            NewStories
-          </div>
-          <div
-            className="cursor-pointer hover:bg-slate-700 p-2"
-            onClick={handleClick}
-          >
-            BestStories
-          </div>
-          <div
-            className="cursor-pointer hover:bg-slate-700 p-2"
-            onClick={handleClick}
-          >
-            AskStories
-          </div>
-          <div
-            className="cursor-pointer hover:bg-slate-700 p-2"
-            onClick={handleClick}
-          >
-            ShowStories
-          </div>
-          <div
-            className="cursor-pointer hover:bg-slate-700 p-2"
-            onClick={handleClick}
-          >
-            JobStories
-          </div>
+      <div className="md:flex md:min-h-screen overflow-auto">
+        <div className={`bg-slate-800 text-white text-center text-xl fixed md:static top-16 left-0 
+            h-[calc(100vh-4rem)] md:h-screen md:w-40 w-full transform transition-transform duration-300 z-50 
+            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
+          <p className="p-2 font-bold m-2 hidden md:block">DASHBOARD</p>
+          {["TopStories","NewStories","BestStories","AskStories","ShowStories","JobStories",].map((item)=> (
+            <div key={item} onClick={() => {setStoryType(item.toLowerCase()); setIsSidebarOpen(false);}}
+              className="cursor-pointer hover:bg-slate-700 p-3 whitespace-nowrap">
+              {item}
+            </div>
+          ))}
         </div>
         <div className="flex-1">
-          <div className="bg-slate-800 h-16 w-full flex justify-end p-4 "><span className="text-white text-xl font-semibold mr-4">Hacker News</span><FaUser className="text-white text-2xl" /></div>
-          <div className="bg-slate-900 h-[calc(100vh-4rem)]">
+          <div className="bg-slate-800 h-16 w-full flex md:justify-end justify-between items-center p-4 ">
+            <div className="flex ">
+            <span className="text-white text-xl font-semibold mr-4">
+              Hacker News
+            </span>
+            <FaUser className="text-white text-2xl" />
+            </div>
+            {isSidebarOpen ? (
+              <IoIosCloseCircle className="text-white text-2xl md:hidden cursor-pointer" onClick={() => setIsSidebarOpen(false)} />
+            ) : (
+              <FaBars className="text-white text-2xl md:hidden cursor-pointer" onClick={() => setIsSidebarOpen(true)} />
+            )}
+          </div>
+          <div className="bg-slate-900 md:h-[calc(100vh-4rem)] h-full">
             <div className="flex bg-slate-900 text-white h-full">
-              <div className="bg-slate-900 h-[calc(100vh-4rem)]">
+                 <div className="bg-slate-900 md:h-[calc(100vh-4rem)] h-full">
                 {loading ? (
-                  <h2 className="text-white p-4">Loading...</h2>
+                  <h2 className="text-white p-4 bg-slate-900 min-h-screen">Loading...</h2>
                 ) : (
-                  <div className="flex h-full">
-                    {/* LEFT SIDE - STORY LIST */}
-                    <div className="w-1/2 p-4 border-r border-gray-700">
+                  <div className="flex flex-col md:flex-row h-full">
+                    {/* Story List */}
+                    <div className="w-full md:w-1/2 p-4 border-b md:border-b-0 md:border-r border-gray-700">
+                      <div className="text-lg font-bold mb-4">News List</div>
                       {currentStories.map((news, index) => (
                         <div key={index} className="mb-1">
-                          Story ID:{" "}
-                          <button
-                            className="text-blue-500 cursor-pointer"
-                            onClick={() => fetchnews(news)}
-                          >
+                          <span>{index + 1}. </span>
+                          News ID:{" "}
+                          <button className="text-blue-500 ml-2" onClick={() => fetchnews(news)}>
                             {news}
                           </button>
                         </div>
                       ))}
 
                       {/* Pagination */}
-                      <div className="mt-4 flex gap-4 items-center">
+                      <div className="mt-4 flex gap-4 items-center flex-wrap md:w-100">
                         <button
                           disabled={currentPage === 1}
                           onClick={() => setCurrentPage(currentPage - 1)}
@@ -142,14 +123,13 @@ function Navbar() {
                       </div>
                     </div>
 
-                    {/* RIGHT SIDE - SELECTED STORY */}
-                    <div className="w-1/2 p-6">
+                    <div className="w-full md:w-1/2 p-6">
                       {selectedStory ? (
-                        <div className="bg-gray-800 p-4 w-120 rounded">
-                          <h2 className="text-xl font-bold mb-2">
+                        <div className="bg-gray-800 p-4 rounded">
+                          <h2 className="text-lg md:text-xl font-bold mb-2">
                             {selectedStory.title}
                           </h2>
-
+                          <p>Time: {new Date(selectedStory.time * 1000).toLocaleString()}</p>
                           <p>Type: {selectedStory.type}</p>
 
                           {selectedStory.url ? (
@@ -168,14 +148,14 @@ function Navbar() {
                           <p className="mt-2">By: {selectedStory.by}</p>
                         </div>
                       ) : (
-                        <p className="text-gray-400">
-                          Click a story ID to see details
+                        <p className="text-gray-400 min-h-screen">
+                          Click a story to see details
                         </p>
                       )}
                     </div>
                   </div>
                 )}
-              </div>
+                </div>
             </div>
           </div>
         </div>
