@@ -83,6 +83,9 @@ function Navbar() {
               Hacker News
             </span>
             <FaUser className="text-white text-2xl hover:cursor-pointer" onClick={()=>{logout();handlelogout();}}/>
+              <span className="text-white text-xl font-semibold mr-4">
+              Logout
+            </span>
             </div>
             {isSidebarOpen ? (
               <IoIosCloseCircle className="text-white text-2xl md:hidden cursor-pointer" onClick={() => setIsSidebarOpen(false)} />
