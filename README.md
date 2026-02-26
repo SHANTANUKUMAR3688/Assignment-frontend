@@ -74,7 +74,7 @@ Follow these steps to run the project locally.
 ### Clone the repository
 
 ```bash
-git clone https://github.com/your-username/hacker-news-dashboard.git
+git clone https://github.com/SHANTANUKUMAR3688/Assignment-frontend.git
 ```
 
 ### Navigate to project folder
