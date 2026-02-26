@@ -3,6 +3,9 @@ import axios from "axios";
 import { FaUser } from "react-icons/fa6";
 import { FaBars } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "./firebase";
 function Navbar() {
   const [data, setdata] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -51,12 +54,20 @@ function Navbar() {
       setLoading(false);
     }
   };
+  const navigate = useNavigate();
+  const logout =async()=>{
+    await signOut(auth);
+    navigate("/");
+  }
+  const handlelogout=()=>{
+    sessionStorage.removeItem("id");
+    navigate("/");
+  }
   return (
     <>
       <div className="md:flex md:min-h-screen overflow-auto">
         <div className={`bg-slate-800 text-white text-center text-xl fixed md:static top-16 left-0 
-            h-[calc(100vh-4rem)] md:h-screen md:w-40 w-full transform transition-transform duration-300 z-50 
-            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
+            h-[calc(100vh-4rem)] md:h-screen md:w-40 w-full transform transition-transform duration-300 z-50 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
           <p className="p-2 font-bold m-2 hidden md:block">DASHBOARD</p>
           {["TopStories","NewStories","BestStories","AskStories","ShowStories","JobStories",].map((item)=> (
             <div key={item} onClick={() => {setStoryType(item.toLowerCase()); setIsSidebarOpen(false);}}
@@ -71,7 +82,7 @@ function Navbar() {
             <span className="text-white text-xl font-semibold mr-4">
               Hacker News
             </span>
-            <FaUser className="text-white text-2xl" />
+            <FaUser className="text-white text-2xl hover:cursor-pointer" onClick={()=>{logout();handlelogout();}}/>
             </div>
             {isSidebarOpen ? (
               <IoIosCloseCircle className="text-white text-2xl md:hidden cursor-pointer" onClick={() => setIsSidebarOpen(false)} />
