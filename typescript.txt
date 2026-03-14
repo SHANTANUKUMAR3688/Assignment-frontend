@@ -1,0 +1,278 @@
+// number declare
+// let mynum:number=10;
+
+// // string declare
+// let mystr:string='shan';
+
+// // boolean declare
+// let mybool:boolean=true;
+
+// // bigint declare
+// let bignumber:bigint=5634675175196751857454n;
+// let anotherbignum=BigInt("4651965196421981586444515");
+
+// // any declare
+// let myfav:any=5;
+// myfav='dragon';
+
+// // unknown type declare
+// let myunk:unknown=56;
+// | Feature              | `any`       | `unknown`   |
+// | -------------------- | ----------- | ----------- |
+// | Type safety          | ❌ No safety | ✅ Safe      |
+// | Assign any value     | ✅ Yes       | ✅ Yes       |
+// | Use without checking | ✅ Yes       | ❌ No        |
+// | Recommended          | ❌ Avoid     | ✅ Preferred |
+
+// function declare
+// function greet(name:string,id:number):string{
+//     return `welcome ${name} and your id is ${id}`;
+// }
+// console.log(greet('shantanu',1));
+
+// // arrow function declare
+// const greet1=(name:string,id:number):string=>{
+//     return `welcome ${name} and your id is ${id}`;
+// }
+// console.log(greet1('rahul',2));
+
+// // type annotion , type inference, type alias
+
+// // default parameter
+// function greet(name:string,id:number=1):string{
+//     return `welcome ${name} and your id is ${id}`;
+// }
+// console.log(greet('shantanu'));
+
+// // optinal parameter => use ? 
+// function greet(name:string,id?:number):string{
+//     return `welcome ${name} and your id is ${id}`;
+// }
+// console.log(greet('shantanu',1));
+
+// array 
+// let arr:number[]=[1,2,3];
+// // use array constructor
+// const arr1:number[]=new Array(1,2,3);
+// array of method
+// const names:string[]=Array.of('vinod','thapa','youtube');
+
+
+// // array methods
+// names.forEach((item:string)=>{
+//     console.log(item);
+// })
+
+// // object declare
+// const person:{
+//     name:string
+//     age:number
+//     isstudent:boolean
+//     address:{city:string;country:string}
+// }={
+//     name:'shantanu',
+//     age:25,
+//     isstudent:true,
+//     address:{
+//         city:'Delhi',
+//         country:'India'
+//     }
+// }
+
+// // type alias
+// type Person={
+//     name:string,
+//     age:number,
+//     isstudent:boolean,
+//     address:{city:string;country:string}
+// }
+// const person:Person{
+//     name:'shantanu',
+//     age:25,
+//     isstudent:true,
+//     address:{
+//         city:'Delhi',
+//         country:'India'
+//     }
+// }
+
+// type Product={
+//     name:string,
+//     price:number,
+//     quantity:number
+// }
+// const product:Product={
+//     name:'laptop',
+//     price:1000,
+//     quantity:5
+// }
+
+// const calculateprice=(product:Product)=>{
+//     return product.price*product.quantity
+// }
+// console.log(calculateprice(product));
+
+// // call signature
+// type Add = {
+//   (a: number, b: number): number;
+// };
+
+// const add: Add = (x, y) => {
+//   return x + y;
+// };
+
+// console.log(add(2, 3));
+
+// // call signature using interface
+// interface Greet {
+//   (name: string): string;
+// }
+
+// const greet: Greet = (name) => {
+//   return "Hello " + name;
+// };
+
+// console.log(greet("John"));
+
+// enums 
+// enum Roles{
+//     user='user',
+//     admin='admin'
+// }
+
+// type logindetails={
+//     name:string,
+//     email:string,
+//     password:string,
+//     role:Roles
+// }
+
+// const user1:logindetails={
+//     name:'shantanu',
+//     email:'sk123@gmail.com',
+//     password:'123456',
+//     role:Roles.admin
+// }
+
+// const user2:logindetails={
+//     name:'rahul',
+//     email:'rk123@gmail.com',
+//     password:'123456',
+//     role:Roles.user
+// }
+
+// console.log(user1.role);
+// console.log(user2.role);
+
+// tuple
+type Product = readonly[number, string, number]
+
+const product1: Product = [1, 'Laptop', 75000]
+
+const showProduct = (p: Product) => {
+  const [id, name, price] = p
+  console.log(id, name, price)
+}
+
+showProduct(product1)
+
+// union
+function display(value: string | number) {
+  if (typeof value === "string") {
+    console.log("String:", value.toUpperCase());
+  } else {
+    console.log("Number:", value + 10);
+  }
+}
+
+display("hello");
+display(20);
+
+
+type User = {
+  name: string;
+  id: number | string;
+}
+
+const user1: User = {
+  name: "Shantanu",
+  id: 101
+}
+
+const user2: User = {
+  name: "Rahul",
+  id: "A102"
+}
+
+
+let data: (number | string)[] = [1, "hello", 2, "world"];
+console.log(data);
+
+
+// Intersection
+type Person = {
+  name: string
+}
+
+type Employee = {
+  id: number
+}
+
+type Staff = Person & Employee
+
+const staff1: Staff = {
+  name: "Shantanu",
+  id: 101
+}
+
+console.log(staff1)
+
+
+type A = {
+  a: number
+}
+
+type B = {
+  b: number
+}
+
+function printValue(obj: A & B) {
+  console.log(obj.a + obj.b)
+}
+
+printValue({ a: 5, b: 10 })
+
+
+// generics
+function identity<T>(value: T): T {
+  return value;
+}
+
+console.log(identity<string>("Hello"));
+console.log(identity<number>(10));
+
+
+function getFirstElement<T>(arr: T[]): T {
+  return arr[0];
+}
+
+console.log(getFirstElement<number>([10, 20, 30]));
+console.log(getFirstElement<string>(["a", "b", "c"]));
+
+
+interface Box<T> {
+  value: T;
+}
+
+const numberBox: Box<number> = { value: 100 };
+const stringBox: Box<string> = { value: "Hello" };
+
+console.log(numberBox.value);
+console.log(stringBox.value);
+
+
+
+
+
+
+
